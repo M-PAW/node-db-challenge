@@ -44,7 +44,7 @@ server.get('/:id/tasks', (req, res) => {
 });
 
 // get project by id
-server.get('/projects/:id', (req, res) => {
+server.get('/:id', (req, res) => {
     const id = req.body.id;
   db
     .getById(id)
@@ -56,13 +56,13 @@ server.get('/projects/:id', (req, res) => {
   });
 });
 
-server.post("/projects", (req, res) => {
+server.post("/", (req, res) => {
     const projectData = req.body;
   
     db
       .addProject(projectData)
-      .then(res => {
-        res.status(201).json({ res });
+      .then(proj => {
+        res.status(201).json(proj);
       })
       .catch(err => {
         res.status(500).json({ message: "Failed to create new project" });
@@ -70,25 +70,26 @@ server.post("/projects", (req, res) => {
   });
 
   server.post("/resources", (req, res) => {
-    const resourcesData = req.body;
+    const resourceData = req.body;
   
     db
-      .addProject(resourceData)
-      .then(res => {
-        res.status(201).json({ res });
+      .addResource(resourceData)
+      .then(resource => {
+        res.status(201).json(resource);
       })
       .catch(err => {
         res.status(500).json({ message: "Failed to create new resource" });
       });
   });
 
-  server.post("/tasks", (req, res) => {
+  server.post("/:id/tasks", (req, res) => {
     const taskData = req.body;
+    const id = req.body.id;
   
     db
-      .addProject(taskData)
-      .then(res => {
-        res.status(201).json({ res });
+      .addTask(taskData, id)
+      .then(task => {
+        res.status(201).json(task);
       })
       .catch(err => {
         res.status(500).json({ message: "Failed to create new task" });

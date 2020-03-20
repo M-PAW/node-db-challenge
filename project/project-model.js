@@ -32,7 +32,7 @@ function getById(id) {
 }
 
 function addProject(project){
-    return db('project')
+    return db('projects')
     .insert(project)
 }
 
