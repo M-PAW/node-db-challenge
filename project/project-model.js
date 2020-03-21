@@ -19,14 +19,14 @@ function getResources(){
 }
 
 function getTasks(id){
-    return db('project')
+    return db('projects')
+    .join('tasks', 'tasks.projectId', 'projects.id')
     .select('*')
-    .join('tasks', 'tasks.projectId', 'project.id')
     .where({projectId: id})
 }
 
 function getById(id) {
-    return db('project')
+    return db('projects')
     .where({id})
     .first()
 }

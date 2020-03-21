@@ -7,7 +7,7 @@ const server = express();
 
 
 server.get('/', (req, res) => {
-  // get all projects from the database
+  // Get Projects - Working
   db
   .getProjects()
   .then(projects => {
@@ -18,7 +18,7 @@ server.get('/', (req, res) => {
   });
 });
 
-// Get Resources
+// Get Resources - Working
 server.get('/resources', (req, res) => {
 
   db
@@ -33,6 +33,7 @@ server.get('/resources', (req, res) => {
 
 // get Tasks
 server.get('/:id/tasks', (req, res) => {
+  const { id }  = req.params;
   db
   .getTasks(id)
   .then(tasks => {
@@ -83,13 +84,17 @@ server.post("/", (req, res) => {
   });
 
   server.post("/:id/tasks", (req, res) => {
-    const taskData = req.body;
-    const id = req.body.id;
-  
-    db
-      .addTask(taskData, id)
+    db.getById(req.params.id)
       .then(task => {
+        if(task){
+          db.addTask(req.body, req.params.id)
+            .then(task => {
         res.status(201).json(task);
+      })
+            
+        } else {
+          res.status(404).json({ message: 'Cannot find the item by id'})
+        }
       })
       .catch(err => {
         res.status(500).json({ message: "Failed to create new task" });

@@ -37,7 +37,7 @@ exports.up = function(knex) {
         .integer("projectId")
         .notNullable()
         .references('id')
-        .inTable("project")
+        .inTable("projects")
   })
 
   .createTable("resources", tbl => {
@@ -51,6 +51,21 @@ exports.up = function(knex) {
       tbl
         .string("description")
   })
+
+  .createTable('project-resources', tbl => {
+    tbl.primary(['projectId', 'resourceId'])
+    tbl.integer('projectId')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('projects');
+    tbl.integer('resourceId')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('resources');
+})
+
 };
 
 exports.down = function(knex) {
